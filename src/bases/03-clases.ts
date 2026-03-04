@@ -69,7 +69,7 @@ export class Usuario {
     //status y el id del endpoint
     try {
       //realizamos la solicitud y destructuramos 'data'
-      const { data } = await axios.get('https://rickandmortyapi.com/api/character/77');
+      const { data } = await axios.get<String>('https://rickandmortyapi.com/api/character/77');
 
 
       //Destructuramos las propiedades que nos interesan, con los valores por defecto
@@ -88,5 +88,6 @@ export class Usuario {
 export const userClass = new Usuario(1, "Diego", 34);
 // console.log();
 userClass.getMoves()
+
 
 
