@@ -3,7 +3,13 @@ import typescriptLogo from "./typescript.svg";
 import viteLogo from "/vite.svg";
 import { setupCounter } from "./counter.ts";
 import { users } from "./bases/01-intro";
-import { userClass } from "./bases/03-clases.ts";
+import { userClass} from "./bases/03-clases.ts";
+import { Usuario } from "./bases/inyeccionDependencias.ts";
+import { RickapiAdapter } from "./api/rickApi.adapter.ts";
+
+const httpAdapter = new RickapiAdapter();
+const usuario = new Usuario(1, "Diego", 30, httpAdapter);//Instacias de usuario con adaptador
+
 
 async function loadData() {
   const dataRM = await userClass.getMoves();
@@ -29,6 +35,11 @@ async function loadData() {
     <p> Este es el capitulo ${dataRM.id} y ese capitulo se llama <b> ${dataRM.name} </b> </p>
      <h2>${userClass.getMoves()}</h2>
       <img src="${dataRM.image}" alt="Imagen del usuario" />
+
+    <h1> Objeto usuando Rick y Morty con Inyección de dependencias <h1>
+    <p>${usuario.saludar()}</p>
+    <p>Personaje: ${dataRM.name} (id: ${dataRM.id})</p>
+    <img src="${dataRM.image}" alt="${dataRM.name}"</p>   
       
 
       
@@ -41,6 +52,7 @@ async function loadData() {
    
   </div>`;
 }
+//llamar la funcion asincrona
 loadData();
 
 setupCounter(document.querySelector<HTMLButtonElement>("#counter")!);

@@ -17,3 +17,8 @@ export interface Location {
     name: string;
     url:  string;
 }
+
+export interface HttpAdapter {
+    get<T>(url: string): Promise<T>;
+}
+

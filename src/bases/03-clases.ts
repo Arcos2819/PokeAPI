@@ -31,6 +31,7 @@
 // //Crear un objeto tipo Usuario
 // export const userClass = new Usuarios("Diego", 30);
 import axios from 'axios';
+import type { RickapiResponse, HttpAdapter } from '../interfaces/rickapi-response.interface';
 
 // La sintaxis Promise<CharacterData> es parte del sistema de tipos genéricos en TypeScript. Cuando defines una función 
 // asíncrona, ésta devuelve una promesa (Promise), lo que significa que en algún momento en el futuro se resolverá (o 
@@ -48,7 +49,8 @@ export class Usuario {
   constructor(
     public id: number,
     public nombre: string,
-    public edad: number
+    public edad: number,
+    private httpAdapter?: HttpAdapter
   ) { }
 
   get imageUrl(): string {
@@ -60,6 +62,7 @@ export class Usuario {
   }
 
   async getMoves(): Promise<CharacterData> {
+
     // const moves  = 10;
     // se destructura un objetoque se esta guardando
     // const {data} = await axios.get('https://rickandmortyapi.com/api/character/77');
@@ -69,11 +72,14 @@ export class Usuario {
     //status y el id del endpoint
     try {
       //realizamos la solicitud y destructuramos 'data'
-      const { data } = await axios.get<String>('https://rickandmortyapi.com/api/character/77');
+    
+      const datosRick = this.httpAdapter 
+        ? await this.httpAdapter.get<RickapiResponse>('https://rickandmortyapi.com/api/character/77')
+        : await axios.get<RickapiResponse>('https://rickandmortyapi.com/api/character/77').then(res => res.data);
 
 
       //Destructuramos las propiedades que nos interesan, con los valores por defecto
-      const { image = '', name = 'Desconocido', status = 'N/A', id } = data;
+      const { image = '', name = 'Desconocido', status = 'N/A', id } = datosRick;
       console.log(image);
 
       //Retornamos solo los datos relevantes
