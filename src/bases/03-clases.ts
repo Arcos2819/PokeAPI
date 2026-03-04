@@ -49,9 +49,27 @@ export class Usuario {
 
   async getMoves() {
     // const moves  = 10;
-    const resp = await axios.get('https://rickandmortyapi.com/api/character/77');
-    console.log(resp);
-    //return resp;
+    // se destructura un objetoque se esta guardando
+    // const {data} = await axios.get('https://rickandmortyapi.com/api/character/77');
+    // console.log(data.image);
+
+    //vamos a destructurar la data para obtener la imagen, el name, el 
+    //status y el id del endpoint
+    try {
+      //realizamos la solicitud y destructuramos 'data'
+      const { data } = await axios.get('https://rickandmortyapi.com/api/character/77');
+
+
+      //Destructuramos las propiedades que nos interesan, con los valores por defecto
+      const { image = '', name = 'Desconocido', status = 'N/A', id } = data;
+      console.log(image);
+
+      //Retornamos solo los datos relevantes
+      return { image, name, status, id };
+    }catch(error) {
+      console.error('Error al obtener los datos:', error);
+      throw error;
+    }
   }
 }
 //Crear un objeto tipo Usuario
