@@ -72,32 +72,32 @@
 import axios from "axios";
 import type { PokeapiResponse } from "../bases/PokenAPI";
 
-export interface  PokemonCardData {
+export interface PokemonCardData {
   id: number;
   nombre: string;
   imagen: string;
   descripcion: string;
 }
 export class PokemonService {
-async getPokemon(id: number): Promise<PokemonCardData> {
-        // Petición modular al endpoint
-        const { data } = await axios.get<PokeapiResponse>(`https://pokeapi.co/api/v2/pokemon/${id}`);
-        
-        // Aplicando Destructuring (Requisito de buenas prácticas)
-        const { name: nombre, id: pokemonId, sprites, abilities } = data;
-        const { front_default: imagen } = sprites;
-        const descripcion = `Habilidad: ${abilities[0].ability.name}`;
+  async getPokemon(id: number): Promise<PokemonCardData> {
+    // Petición modular al endpoint
+    const { data } = await axios.get<PokeapiResponse>(
+      `https://pokeapi.co/api/v2/pokemon/${id}`,
+    );
 
-        return { id: pokemonId, nombre, imagen, descripcion };
+    // Aplicando Destructuring (Requisito de buenas prácticas)
+    const { name: nombre, id: pokemonId, sprites, abilities } = data;
+    const { front_default: imagen } = sprites;
+    const descripcion = `Habilidad: ${abilities[0].ability.name}`;
+
+    return { id: pokemonId, nombre, imagen, descripcion };
   }
   // Lógica para obtener el listado inicial
   async getInitialList(cantidad: number = 20): Promise<PokemonCardData[]> {
-        const promesas = Array.from({ length: cantidad }, (_, i) => this.getPokemon(i + 1));
-        return Promise.all(promesas);
+    const promesas = Array.from({ length: cantidad }, (_, i) =>
+      this.getPokemon(i + 1),
+    );
+    return Promise.all(promesas);
   }
 }
 export const pokemonService = new PokemonService();
-
-
-
-

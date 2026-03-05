@@ -79,7 +79,7 @@ button:hover {
 }
 button:focus,
 button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  outline: 10px auto -webkit-focus-ring-color;
 }
 
 .pokemon-card img {
@@ -94,9 +94,11 @@ button:focus-visible {
 
 .grid-layout {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  /* Fuerza exactamente 5 columnas de igual tamaño */
+  grid-template-columns: repeat(5, 1fr);
   gap: 20px;
   padding: 20px;
+  justify-items: center; /* Centra las tarjetas dentro de su columna */
 }
 
 @media (prefers-color-scheme: light) {

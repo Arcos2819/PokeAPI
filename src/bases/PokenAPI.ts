@@ -1,27 +1,27 @@
 export interface PokeapiResponse {
-    abilities:       AbilityElement[];
-    base_experience: number;
-    forms:           GenericItem[];
-    game_indices:    GameIndex[];
-    id:              number;
-    name:            string;
-    sprites:{
-        front_default: string; 
-    }
+  abilities: AbilityElement[];
+  base_experience: number;
+  forms: GenericItem[];
+  game_indices: GameIndex[];
+  id: number;
+  name: string;
+  sprites: {
+    front_default: string;
+  };
 }
 
 export interface AbilityElement {
-    ability:   GenericItem;
-    is_hidden: boolean;
-    slot:      number;
+  ability: GenericItem;
+  is_hidden: boolean;
+  slot: number;
 }
 
 export interface GenericItem {
-    name: string;
-    url:  string;
+  name: string;
+  url: string;
 }
 
 export interface GameIndex {
-    game_index: number;
-    version:    GenericItem;
+  game_index: number;
+  version: GenericItem;
 }

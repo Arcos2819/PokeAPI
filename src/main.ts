@@ -1,26 +1,26 @@
 import "./style.css";
-import { pokemonService} from './bases/03-clases';
-import type { PokemonCardData } from './bases/03-clases';
+import { pokemonService } from "./bases/03-clases";
+import type { PokemonCardData } from "./bases/03-clases";
 
-const app = document.querySelector<HTMLDivElement>('#app')!;
+const app = document.querySelector<HTMLDivElement>("#app")!;
 
 async function renderApp() {
-    const pokemons = await pokemonService.getInitialList(20); // Lista inicial
+  const pokemons = await pokemonService.getInitialList(20); // Lista inicial
 
-    app.innerHTML = `
+  app.innerHTML = `
         <h1>Busca Tu Pokemon</h1>
         <input type="text" id="buscador" placeholder="Busca para descubrir..." autocomplete="off">
         <div id="pokemon-container" class="grid-layout">
-            ${pokemons.map(p => drawCard(p)).join('')}
+            ${pokemons.map((p) => drawCard(p)).join("")}
         </div>
     `;
 
-    initSearchLogic();
+  initSearchLogic();
 }
 
 // Función de presentación pura
 function drawCard({ nombre, imagen, descripcion, id }: PokemonCardData) {
-    return `
+  return `
         <div class="pokemon-card" data-nombre="${nombre}">
             <img src="${imagen}" alt="${nombre}">
             <div class="info">
@@ -34,22 +34,22 @@ function drawCard({ nombre, imagen, descripcion, id }: PokemonCardData) {
 
 // Lógica del concepto "Descubierto"
 function initSearchLogic() {
-    const input = document.querySelector<HTMLInputElement>('#buscador')!;
-    const cards = document.querySelectorAll<HTMLDivElement>('.pokemon-card');
+  const input = document.querySelector<HTMLInputElement>("#buscador")!;
+  const cards = document.querySelectorAll<HTMLDivElement>(".pokemon-card");
 
-    input.addEventListener('input', (e) => {
-        const busqueda = (e.target as HTMLInputElement).value.toLowerCase();
+  input.addEventListener("input", (e) => {
+    const busqueda = (e.target as HTMLInputElement).value.toLowerCase();
 
-        cards.forEach(card => {
-            const pokeNombre = card.dataset.nombre || "";
-            // Si el usuario escribe el nombre, se activa el estilo "descubierto"
-            if (busqueda !== "" && pokeNombre.includes(busqueda)) {
-                card.classList.add('descubierto');
-            } else {
-                card.classList.remove('descubierto');
-            }
-        });
+    cards.forEach((card) => {
+      const pokeNombre = card.dataset.nombre || "";
+      // Si el usuario escribe el nombre, se activa el estilo "descubierto"
+      if (busqueda !== "" && pokeNombre.includes(busqueda)) {
+        card.classList.add("descubierto");
+      } else {
+        card.classList.remove("descubierto");
+      }
     });
+  });
 }
 
 renderApp();
