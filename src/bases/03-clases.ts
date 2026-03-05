@@ -30,84 +30,85 @@
 // }
 // //Crear un objeto tipo Usuario
 // export const userClass = new Usuarios("Diego", 30);
-import axios from 'axios';
 
-// La sintaxis Promise<CharacterData> es parte del sistema de tipos genéricos en TypeScript. Cuando defines una función 
-// asíncrona, ésta devuelve una promesa (Promise), lo que significa que en algún momento en el futuro se resolverá (o 
-// rechazará) con un valor. Al usar Promise<CharacterData>, le estás diciendo a TypeScript que cuando la promesa se 
+// La sintaxis Promise<CharacterData> es parte del sistema de tipos genéricos en TypeScript. Cuando defines una función
+// asíncrona, ésta devuelve una promesa (Promise), lo que significa que en algún momento en el futuro se resolverá (o
+// rechazará) con un valor. Al usar Promise<CharacterData>, le estás diciendo a TypeScript que cuando la promesa se
 // resuelva, el valor resultante será de tipo CharacterData.
 
-import type { PokeapiResponse } from '../bases/PokenAPI.ts';
+// async getMoves(): Promise<CharacterData> {
 
-// Definimos qué datos queremos extraer de pokenApi
-export type PokemonData = {
-  nombre: string;
-  experiencia: number;
-  habilidadPrincipal: string;
-}
-export class Usuario {
-  //METODOS
-  constructor(
-    public id: number,
-    public nombre: string,
-    public edad: number,
+//   // const moves  = 10;
+//   // se destructura un objetoque se esta guardando
+//   // const {data} = await axios.get('https://rickandmortyapi.com/api/character/77');
+//   // console.log(data.image);
 
-  ) { }
+//   //vamos a destructurar la data para obtener la imagen, el name, el
+//   //status y el id del endpoint
+//   try {
+//     //realizamos la solicitud y destructuramos 'data'
 
-  async getPokemonInfo(): Promise<PokemonData> {
-    try {
-      // Usamos la URL de la imagen: pokeapi
-      const { data } = await axios.get<PokeapiResponse>(`https://pokeapi.co/api/v2/pokemon/ditto`);
+//     const datosRick = this.httpAdapter
+//       ? await this.httpAdapter.get<RickapiResponse>('https://rickandmortyapi.com/api/character/77')
+//       : await axios.get<RickapiResponse>('https://rickandmortyapi.com/api/character/77').then(res => res.data);
 
-      // Extraemos la información relevante del JSON de la imagen
-      return {
-        nombre: data.name,
-        experiencia: data.base_experience,
-        habilidadPrincipal: data.abilities[0].ability.name
-      };
-    } catch (error) {
-      console.error("Error al obtener datos de Pokémon:", error);
-      throw error;
-    }
+//     //Destructuramos las propiedades que nos interesan, con los valores por defecto
+//     const { image = '', name = 'Desconocido', status = 'N/A', id } = datosRick;
+//     console.log(image);
 
-
-  }
-}
-export const userClass = new Usuario(1, "Emiliano", 18);
-
-  // async getMoves(): Promise<CharacterData> {
-
-  //   // const moves  = 10;
-  //   // se destructura un objetoque se esta guardando
-  //   // const {data} = await axios.get('https://rickandmortyapi.com/api/character/77');
-  //   // console.log(data.image);
-
-  //   //vamos a destructurar la data para obtener la imagen, el name, el 
-  //   //status y el id del endpoint
-  //   try {
-  //     //realizamos la solicitud y destructuramos 'data'
-
-  //     const datosRick = this.httpAdapter
-  //       ? await this.httpAdapter.get<RickapiResponse>('https://rickandmortyapi.com/api/character/77')
-  //       : await axios.get<RickapiResponse>('https://rickandmortyapi.com/api/character/77').then(res => res.data);
-
-
-  //     //Destructuramos las propiedades que nos interesan, con los valores por defecto
-  //     const { image = '', name = 'Desconocido', status = 'N/A', id } = datosRick;
-  //     console.log(image);
-
-  //     //Retornamos solo los datos relevantes
-  //     return { image, name, status, id };
-  //   } catch (error) {
-  //     console.error('Error al obtener los datos:', error);
-  //     throw error;
-  //   }
-  // }
+//     //Retornamos solo los datos relevantes
+//     return { image, name, status, id };
+//   } catch (error) {
+//     console.error('Error al obtener los datos:', error);
+//     throw error;
+//   }
+// }
 
 // //Crear un objeto tipo Usuario
 // export const userClass = new Usuario(1, "Diego", 34);
 // // console.log();
 // userClass.getMoves()
+
+import axios from "axios";
+import type { PokeapiResponse } from "../bases/PokenAPI";
+
+export interface PokemonSimplified {
+  id: number;
+  nombre: string;
+  imagen: string;
+}
+export class PokemonService {
+  // Método para obtener un solo Pokémon
+  async getPokemonData(idOrName: string | number): Promise<PokemonSimplified> {
+    try {
+      const { data } = await axios.get<PokeapiResponse>(
+        `https://pokeapi.co/api/v2/pokemon/${idOrName}`,
+      );
+
+      // Aplicando destructuring a la respuesta
+      const { id, name, sprites } = data as any; // sprites sirve para optimizar rendimiento
+
+      return {
+        id,
+        nombre: name,
+        imagen: sprites.front_default,
+      };
+    } catch (error) {
+      console.error("Error al obtener Pokémon:", error);
+      throw error;
+    }
+  }
+  // Lógica para obtener el listado inicial
+  async getPokemonList(limit: number = 20): Promise<PokemonSimplified[]> {
+    const pokemonPromises = [];
+    for (let i = 1; i <= limit; i++) {
+      pokemonPromises.push(this.getPokemonData(i));
+    }
+    return Promise.all(pokemonPromises);
+  }
+}
+export const pokemonService = new PokemonService();
+
 
 
 
