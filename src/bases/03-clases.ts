@@ -78,6 +78,31 @@ export interface PokemonCardData {
   imagen: string;
   descripcion: string;
 }
+
+// Mapeo de descripciones de pokémon en español
+const descripcionesPokemon: { [key: string]: string } = {
+  bulbasaur: "Pokémon de tipo Planta/Veneno. Tiene un bulbo en su espalda que le permite realizar ataques de plantas.",
+  ivysaur: "Evolución de Bulbizarre. El bulbo crece y se abre gradualmente conforme el pokémon se desarrolla.",
+  venusaur: "Forma final de Bulbizarre. Su flor es capaz de captar la energía del sol para potenciar sus ataques.",
+  charmander: "Pokémon de tipo Fuego. Vive en montañas volcánicas y su cola refleja su nivel de vida.",
+  charmeleon: "Evolución de Charmander. Se vuelve más agresivo y territorial al evolucionar.",
+  charizard: "Forma final de Charmander. Puede volar y su aliento es una llamarada de fuego.",
+  squirtle: "Pokémon de tipo Agua. Tiene un caparazón que usa para protegerse de los ataques.",
+  wartortle: "Evolución de Squirtle. Desarrolla orejas peludas blancas y se vuelve más fuerte.",
+  blastoise: "Forma final de Squirtle. Tiene cañones de agua en su caparazón para atacar.",
+  caterpie: "Pokémon de tipo Bicho. Pequeño y frágil, se alimenta de hojas de plantas.",
+  metapod: "Evolución de Caterpie. Se enduerce formando un capullo protecter.",
+  butterfree: "Forma final de Caterpie. Un pokémon mariposa capaz de volar y atacar con polvo.",
+  weedle: "Pokémon de tipo Bicho/Veneno. Pequeño pero peligroso por su veneno.",
+  kakuna: "Pokémon de tipo Bicho/Veneno. Se encuentra en estado de transformación.",
+  beedrill: "Pokémon de tipo Bicho/Veneno. Usa sus aguijones para atacar a sus enemigos.",
+  pidgey: "Pokémon de tipo Normal/Volador. Común en prados y bosques, muy dócil.",
+  pidgeotto: "Evolución de Pidgey. Es más fuerte y agresivo en combate.",
+  pidgeot: "Forma final de Pidgey. Excelente volador con alas poderosas.",
+  rattata: "Pokémon de tipo Normal. Pequeño y rápido, vive en las alcantarillas.",
+  raticate: "Evolución de Rattata. Más grande y agresivo, sus dientes son muy afilados.",
+};
+
 export class PokemonService {
   async getPokemon(id: number): Promise<PokemonCardData> {
     // Petición modular al endpoint
@@ -88,7 +113,12 @@ export class PokemonService {
     // Aplicando Destructuring (Requisito de buenas prácticas)
     const { name: nombre, id: pokemonId, sprites, abilities } = data;
     const { front_default: imagen } = sprites;
-    const descripcion = `Habilidad: ${abilities[0].ability.name}`;
+    
+    // Obtener descripción personalizada o genérica
+    let descripcion = descripcionesPokemon[nombre.toLowerCase()];
+    if (!descripcion) {
+      descripcion = `Habilidad: ${abilities[0].ability.name.charAt(0).toUpperCase() + abilities[0].ability.name.slice(1)}. Un pokémon único y especial.`;
+    }
 
     return { id: pokemonId, nombre, imagen, descripcion };
   }
