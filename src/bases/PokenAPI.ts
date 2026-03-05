@@ -5,6 +5,9 @@ export interface PokeapiResponse {
     game_indices:    GameIndex[];
     id:              number;
     name:            string;
+    sprites:{
+        front_default: string; 
+    }
 }
 
 export interface AbilityElement {
