@@ -5,7 +5,7 @@ import type { PokemonCardData } from "./bases/03-clases";
 const app = document.querySelector<HTMLDivElement>("#app")!;
 
 async function renderApp() {
-  const pokemons = await pokemonService.getInitialList(20); // Lista inicial
+  const pokemons = await pokemonService.getInitialList(40); // Lista inicial
 
   app.innerHTML = `
         <h1>Busca Tu Pokemon</h1>
